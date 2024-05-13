@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Features\UserAddresses\Queries\GetList\GetListUserAddressQuey.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ETradeBackend.Domain\ETradeBackend.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Framework.Application">
+      <HintPath>..\..\..\..\..\Framework\src\Framework\Core\Framework.Application\bin\Debug\net8.0\Framework.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="Framework.Domain">
+      <HintPath>..\..\..\..\..\Framework\src\Framework\Infrastructure\Framework.Persistence\bin\Debug\net8.0\Framework.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="Framework.Persistence">
+      <HintPath>..\..\..\..\..\Framework\src\Framework\Infrastructure\Framework.Persistence\bin\Debug\net8.0\Framework.Persistence.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.9.1" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
+  </ItemGroup>
+
+</Project>
