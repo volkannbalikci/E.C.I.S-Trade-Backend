@@ -5,6 +5,7 @@ using Framework.Application.Requests;
 using Framework.Application.Responses;
 using Framework.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,7 @@ public class GetListCorporateUserQuery : IRequest<GetListResponse<GetListCorpora
             Paginate<CorporateUser> corporateUsers = await _corporateUserRepository.GetListByPaginateAsync(
                 index: request.PageRequest.PageIndex,
                 size: request.PageRequest.PageSize,
+                include: c => c.Include(c=> c.User),
                 cancellationToken: cancellationToken
                 );
             GetListResponse<GetListCorporateUserListItemDto> getListResponse = _mapper.Map<GetListResponse<GetListCorporateUserListItemDto>>(corporateUsers);

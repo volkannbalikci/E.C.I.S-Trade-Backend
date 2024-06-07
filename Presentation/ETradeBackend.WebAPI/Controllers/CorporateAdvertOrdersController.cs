@@ -21,7 +21,7 @@ public class CorporateAdvertOrdersController : CustomControllerBase
         return Ok(createdCorporateAdvertOrderResponse);
     }
 
-    [HttpDelete("{Id}")]
+    [HttpDelete("{corporateAdvertOrderId}")]
     public async Task<IActionResult> Delete([FromRoute] Guid corporateAdvertOrderId)
     {
         DeleteCorporateAdvertOrderCommand deleteCorporateAdvertOrderCommand = new() { Id = corporateAdvertOrderId };

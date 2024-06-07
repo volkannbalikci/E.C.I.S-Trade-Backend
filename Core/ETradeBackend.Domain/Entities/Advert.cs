@@ -14,7 +14,7 @@ public class Advert : EntityBase<Guid>
     public string Title { get; set; }
     public string Description { get; set; }
 
-    public virtual ICollection<AdvertPhotoPath>? AdvertPhotoPaths { get; set; }
+    public virtual ICollection<AdvertImageFile>? AdvertImageFiles { get; set; }
     public virtual IndividualAdvert? IndividualAdvert { get; set; }
     public virtual CorporateAdvert? CorporateAdvert { get; set; }
     public virtual SwapAdvert? SwapAdvert { get; set; }

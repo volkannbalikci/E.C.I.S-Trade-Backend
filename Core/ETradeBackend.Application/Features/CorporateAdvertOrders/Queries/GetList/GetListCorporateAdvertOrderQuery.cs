@@ -51,9 +51,10 @@ public class GetListCorporateAdvertOrderQuery : IRequest<GetListResponse<GetList
             GetListResponse<GetListCorporateAdvertOrderListItemDto> getListResponse = _mapper.Map<GetListResponse<GetListCorporateAdvertOrderListItemDto>>(paginate);
             foreach (var item in getListResponse.Items)
             {
-                var _orderItems = _corporateAdvertOrderItemRepository.GetListByQueryable(predicate: c => c.CorporateAdvertOrderId == item.CorporateAdvertOrderId).ToList();
-
-                    item.OrderItems = _mapper.Map<List<GetListCorporateAdvertOrderItemListItemDto>>(_orderItems);
+                var _orderItems = _corporateAdvertOrderItemRepository.GetListByQueryable(
+                    include: c => c.Include(c => c.CorporateAdvert).ThenInclude(c => c.Advert),
+                    predicate: c => c.CorporateAdvertOrderId == item.CorporateAdvertOrderId).ToList();
+                item.OrderItems = _mapper.Map<List<GetListCorporateAdvertOrderItemListItemDto>>(_orderItems);
             }
             return getListResponse;
         }

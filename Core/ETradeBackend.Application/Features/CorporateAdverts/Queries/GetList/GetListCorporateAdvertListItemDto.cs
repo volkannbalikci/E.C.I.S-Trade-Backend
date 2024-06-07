@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ETradeBackend.Application.Features.AdvertImageFiles.Queries.GetList;
+using ETradeBackend.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,4 +32,6 @@ public class GetListCorporateAdvertListItemDto
 
     public decimal UnitPrice { get; set; }
     public int StockAmount { get; set; }
+
+    public List<GetListAdvertImageFileListItemDto> Images { get; set; }  
 }

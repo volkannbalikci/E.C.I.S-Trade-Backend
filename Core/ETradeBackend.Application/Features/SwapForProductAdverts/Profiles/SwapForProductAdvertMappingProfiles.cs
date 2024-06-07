@@ -20,6 +20,8 @@ public class SwapForProductAdvertMappingProfiles : Profile
 {
     public SwapForProductAdvertMappingProfiles()
     {
+        CreateMap<Advert, CreateSwapForProductAdvertCommand>().ReverseMap();
+        CreateMap<SwapAdvert, CreateSwapForProductAdvertCommand>().ReverseMap();
         CreateMap<SwapForProductAdvert, CreateSwapForProductAdvertCommand>().ReverseMap();
         CreateMap<SwapForProductAdvert, CreatedSwapForProductAdvertResponse>()
             .ForMember(destinationMember: s => s.SwapForProductAdvertId, memberOptions: opt => opt.MapFrom(s => s.Id)).ReverseMap();

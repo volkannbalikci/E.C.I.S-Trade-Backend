@@ -28,7 +28,13 @@ public class CorporateUserMappingProfiles : Profile
         CreateMap<User, CreateCorporateUserCommand>().ReverseMap();
 
         CreateMap<Paginate<CorporateUser>, GetListResponse<GetListCorporateUserListItemDto>>().ReverseMap();
-        CreateMap<CorporateUser, GetListCorporateUserListItemDto>().ReverseMap();
+        CreateMap<CorporateUser, GetListCorporateUserListItemDto>()
+            .ForMember(u => u.Id, u => u.MapFrom(u => u.Id))
+            .ForMember(u => u.UserId, u => u.MapFrom(u => u.UserId))
+            .ForMember(u => u.CompanyName, u => u.MapFrom(u => u.CompanyName))
+            .ForMember(u => u.TaxIdentityNumber, u => u.MapFrom(u => u.TaxIdentityNumber))
+            .ForMember(u => u.Email, u => u.MapFrom(u => u.User.Email))
+            .ReverseMap();
         CreateMap<CorporateUser, GetByIdCorporateUserResponse>().ReverseMap();
 
         //CreateMap<CreateCorporateUserCommand, User>().ForMember(e => e.PasswordHash, e => e.MapFrom(e => HashHashingHelper.GetHashByKey(e.Password)))

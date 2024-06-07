@@ -34,7 +34,6 @@ public class CorporateAdvertOrderItemMappingProfiles : Profile
                        .ForMember(destinationMember: i => i.CorporateAdvertOrderId, memberOptions: opt => opt.MapFrom(i => i.CorporateAdvertOrderId))
                        .ForMember(destinationMember: i => i.CorporateAdvertOrderItemId, memberOptions: opt => opt.MapFrom(i => i.Id))
                        .ForMember(destinationMember: i => i.AdvertTitle, memberOptions: opt => opt.MapFrom(i => i.CorporateAdvert.Advert.Title))
-                       .ForMember(destinationMember: i => i.AdvertMainPhotoPath, memberOptions: opt => opt.MapFrom(i => i.CorporateAdvert.Advert.AdvertPhotoPaths))
                        .ForMember(destinationMember: i => i.Amount, memberOptions: opt => opt.MapFrom(i => i.Amount))
                        .ForMember(destinationMember: i => i.TotalPrice, memberOptions: opt => opt.MapFrom(i => i.TotalPrice)).ReverseMap();
 
@@ -42,7 +41,6 @@ public class CorporateAdvertOrderItemMappingProfiles : Profile
                .ForMember(destinationMember: i => i.CorporateAdvertOrderId, memberOptions: opt => opt.MapFrom(i => i.CorporateAdvertOrderId))
                .ForMember(destinationMember: i => i.CorporateAdvertOrderItemId, memberOptions: opt => opt.MapFrom(i => i.Id))
                .ForMember(destinationMember: i => i.AdvertTitle, memberOptions: opt => opt.MapFrom(i => i.CorporateAdvert.Advert.Title))
-               .ForMember(destinationMember: i => i.AdvertMainPhotoPath, memberOptions: opt => opt.MapFrom(i => i.CorporateAdvert.Advert.AdvertPhotoPaths))
                .ForMember(destinationMember: i => i.Amount, memberOptions: opt => opt.MapFrom(i => i.Amount))
                .ForMember(destinationMember: i => i.TotalPrice, memberOptions: opt => opt.MapFrom(i => i.TotalPrice)).ReverseMap();
     }

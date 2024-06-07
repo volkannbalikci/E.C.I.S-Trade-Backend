@@ -1,8 +1,10 @@
-﻿using ETradeBackend.Application.Features.AdvertPhotoPaths.Commands.Create;
+﻿using ETradeBackend.Application.Abstractions.Storage;
+using ETradeBackend.Application.Features.AdvertPhotoPaths.Commands.Create;
 using ETradeBackend.Application.Features.AdvertPhotoPaths.Commands.Delete;
 using ETradeBackend.Application.Features.AdvertPhotoPaths.Commands.Update;
 using ETradeBackend.Application.Features.AdvertPhotoPaths.Queries.GetById;
 using ETradeBackend.Application.Features.AdvertPhotoPaths.Queries.GetList;
+using ETradeBackend.Persistence.Repositories;
 using ETradeBackend.WebAPI.Controllers.Common;
 using Framework.Application.Requests;
 using Framework.Application.Responses;
@@ -16,6 +18,16 @@ namespace ETradeBackend.WebAPI.Controllers;
 [ApiController]
 public class AdvetPhotoPathsController : CustomControllerBase
 {
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IStorageService _storageService;
+    private readonly Application.Services.Repositories.IAdvertImageFileRepository _advertImageFileRepository;
+    public AdvetPhotoPathsController(IWebHostEnvironment webHostEnvironment, IStorageService storageService, Application.Services.Repositories.IAdvertImageFileRepository advertImageFileRepository)
+    {
+        _webHostEnvironment = webHostEnvironment;
+        _storageService = storageService;
+        _advertImageFileRepository = advertImageFileRepository;
+    }
+
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateAdvertPhotoPathCommand createAdvertPhotoPathCommand)
     {
@@ -53,4 +65,10 @@ public class AdvetPhotoPathsController : CustomControllerBase
         GetByIdAdvertPhotoPathResponse getByIdAdvertPhotoPathResponse = await Mediator.Send(getByIdAdvertPhotoPathQuery);
         return Ok(getByIdAdvertPhotoPathResponse);
     }
+
+    //[HttpPost("[action]")]
+    //public async Task<IActionResult> Upload()
+    //{
+    //    var datas = await _storageService.UploadAsync("resource/files", Request.Form.Files);
+    //}
 }

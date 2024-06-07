@@ -2,6 +2,8 @@
 
 public class DeletedSwapForProductAdvertResponse
 {
-    public Guid Id { get; set; }
+    public Guid SwapForCategoryAdvertId { get; set; }
+    public Guid SwapAdvertId { get; set; }
+    public Guid AdvertId { get; set; }
     public DateTime DeletedDate { get; set; }
 }

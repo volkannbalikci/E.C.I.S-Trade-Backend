@@ -3,6 +3,7 @@ using ETradeBackend.Application.Features.SwapAdverts.Commands.Delete;
 using ETradeBackend.Application.Features.SwapAdverts.Commands.Update;
 using ETradeBackend.Application.Features.SwapAdverts.Queries.GetById;
 using ETradeBackend.Application.Features.SwapAdverts.Queries.GetList;
+using ETradeBackend.Domain.Entities;
 using ETradeBackend.WebAPI.Controllers.Common;
 using Framework.Application.Requests;
 using Framework.Application.Responses;
@@ -22,10 +23,10 @@ public class SwapAdvertsController : CustomControllerBase
         return Ok(createdSwapAdvertResponse);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [HttpDelete("{swapAdvertId},{advertId}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid swapAdvertId, [FromRoute] Guid advertId)
     {
-        DeleteSwapAdvertCommand deleteSwapAdvertCommand = new() { Id = id };
+        DeleteSwapAdvertCommand deleteSwapAdvertCommand = new() { SwapAdvertId = swapAdvertId, AdvertId = advertId };
         DeletedSwapAdvertResponse deletedSwapAdvertResponse = await Mediator.Send(deleteSwapAdvertCommand);
         return Ok(deletedSwapAdvertResponse);
     }

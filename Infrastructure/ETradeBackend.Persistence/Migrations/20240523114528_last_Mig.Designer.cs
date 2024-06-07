@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ETradeBackend.Persistence.Migrations
 {
     [DbContext(typeof(ETradeBackendContext))]
-    [Migration("20240424071324_mig_3")]
-    partial class mig_3
+    [Migration("20240523114528_last_Mig")]
+    partial class last_Mig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,10 @@ namespace ETradeBackend.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedDate");
@@ -90,16 +94,25 @@ namespace ETradeBackend.Persistence.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletedDate");
 
-                    b.Property<Guid>("IndividualUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("UpdatedDate");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IndividualUserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Admins");
                 });
@@ -148,6 +161,49 @@ namespace ETradeBackend.Persistence.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Advers");
+                });
+
+            modelBuilder.Entity("ETradeBackend.Domain.Entities.AdvertImageFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AdvertId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Showcase")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Storage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvertId");
+
+                    b.ToTable("AdvertImageFile");
                 });
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.AdvertPhotoPath", b =>
@@ -925,13 +981,13 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.Admin", b =>
                 {
-                    b.HasOne("ETradeBackend.Domain.Entities.IndividualUser", "IndividualUser")
-                        .WithMany("Admins")
-                        .HasForeignKey("IndividualUserId")
+                    b.HasOne("ETradeBackend.Domain.Entities.User", "User")
+                        .WithOne("Admin")
+                        .HasForeignKey("ETradeBackend.Domain.Entities.Admin", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("IndividualUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.Advert", b =>
@@ -958,10 +1014,21 @@ namespace ETradeBackend.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ETradeBackend.Domain.Entities.AdvertImageFile", b =>
+                {
+                    b.HasOne("ETradeBackend.Domain.Entities.Advert", "Advert")
+                        .WithMany("AdvertImageFiles")
+                        .HasForeignKey("AdvertId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Advert");
+                });
+
             modelBuilder.Entity("ETradeBackend.Domain.Entities.AdvertPhotoPath", b =>
                 {
                     b.HasOne("ETradeBackend.Domain.Entities.Advert", "Advert")
-                        .WithMany("AdvertPhotoPaths")
+                        .WithMany()
                         .HasForeignKey("AdvertId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1223,7 +1290,7 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.Advert", b =>
                 {
-                    b.Navigation("AdvertPhotoPaths");
+                    b.Navigation("AdvertImageFiles");
 
                     b.Navigation("CorporateAdvert");
 
@@ -1282,8 +1349,6 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.IndividualUser", b =>
                 {
-                    b.Navigation("Admins");
-
                     b.Navigation("Adverts");
 
                     b.Navigation("CorporateAdvertOrders");
@@ -1319,6 +1384,8 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Admin");
+
                     b.Navigation("CorporateUser");
 
                     b.Navigation("IndividualUser");

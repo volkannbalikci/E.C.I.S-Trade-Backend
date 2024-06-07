@@ -8,5 +8,6 @@ namespace ETradeBackend.Application.Features.OperationClaims.Queries.GetList;
 
 public class GetListOperationClaimListItemDto
 {
+    public Guid Id { get; set; }
     public string OperationClaimName { get; set; }
 }

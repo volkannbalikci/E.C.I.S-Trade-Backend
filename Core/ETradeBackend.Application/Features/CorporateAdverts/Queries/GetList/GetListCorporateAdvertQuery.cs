@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ETradeBackend.Application.Features.AdvertImageFiles.Queries.GetList;
 using ETradeBackend.Application.Services.Repositories;
 using ETradeBackend.Domain.Entities;
 using Framework.Application.Requests;
@@ -6,6 +7,7 @@ using Framework.Application.Responses;
 using Framework.Persistence.Paging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,12 +24,16 @@ public class GetListCorporateAdvertQuery : IRequest<GetListResponse<GetListCorpo
     public class GetListCorporateUserQueryHandler : IRequestHandler<GetListCorporateAdvertQuery, GetListResponse<GetListCorporateAdvertListItemDto>>
     {
         private readonly ICorporateAdvertRepository _corporateAdvertRepository;
+        private readonly IAdvertImageFileRepository _advertImageFileRepository;
+        readonly IConfiguration configuration;
         private readonly IMapper _mapper;
 
-        public GetListCorporateUserQueryHandler(ICorporateAdvertRepository corporateAdvertRepository, IMapper mapper)
+        public GetListCorporateUserQueryHandler(ICorporateAdvertRepository corporateAdvertRepository, IMapper mapper, IAdvertImageFileRepository advertImageFileRepository, IConfiguration configuration)
         {
             _corporateAdvertRepository = corporateAdvertRepository;
             _mapper = mapper;
+            _advertImageFileRepository = advertImageFileRepository;
+            this.configuration = configuration;
         }
 
         public async Task<GetListResponse<GetListCorporateAdvertListItemDto>> Handle(GetListCorporateAdvertQuery request, CancellationToken cancellationToken)
@@ -44,10 +50,20 @@ public class GetListCorporateAdvertQuery : IRequest<GetListResponse<GetListCorpo
                 .Include(c => c.Advert.Product)
                 .Include(c => c.Advert.Product.Brand)
                 .Include(c => c.Advert.Product.Category)
-                .Include(c => c.CorporateUser),
+                .Include(c => c.CorporateUser)
+                .Include(c => c.Advert.AdvertImageFiles),
                 cancellationToken: cancellationToken
                 );
             GetListResponse<GetListCorporateAdvertListItemDto> getListResponse = _mapper.Map<GetListResponse<GetListCorporateAdvertListItemDto>>(paginate);
+            foreach (var item in getListResponse.Items)
+            {
+                item.Images = _advertImageFileRepository.GetListByQueryable(predicate: a => a.AdvertId == item.AdvertId).Select(a => new GetListAdvertImageFileListItemDto
+                {
+                    Path = $"{configuration["BaseStorageUrl"]}/{a.Path}",
+                    FileName = a.FileName,
+                    Id = a.Id
+                }).ToList();
+            }
             return getListResponse;
         }
     }

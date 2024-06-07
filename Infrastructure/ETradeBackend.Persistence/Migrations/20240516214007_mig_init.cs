@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ETradeBackend.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class mig_1 : Migration
+    public partial class mig_init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -144,6 +144,30 @@ namespace ETradeBackend.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Admins",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Admins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Admins_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CorporateUsers",
                 columns: table => new
                 {
@@ -236,27 +260,6 @@ namespace ETradeBackend.Persistence.Migrations
                         name: "FK_Districts_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Admins",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IndividualUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Admins", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Admins_IndividualUsers_IndividualUserId",
-                        column: x => x.IndividualUserId,
-                        principalTable: "IndividualUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -400,6 +403,7 @@ namespace ETradeBackend.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AdvertId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PhotoPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -541,7 +545,6 @@ namespace ETradeBackend.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SwapAdvertId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DesiredCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -550,8 +553,8 @@ namespace ETradeBackend.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_SwapForCategoryAdverts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SwapForCategoryAdverts_Categories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_SwapForCategoryAdverts_Categories_DesiredCategoryId",
+                        column: x => x.DesiredCategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -570,7 +573,6 @@ namespace ETradeBackend.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SwapAdvertId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DesiredProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -579,8 +581,8 @@ namespace ETradeBackend.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_SwapForProductAdverts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SwapForProductAdverts_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_SwapForProductAdverts_Products_DesiredProductId",
+                        column: x => x.DesiredProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -643,9 +645,10 @@ namespace ETradeBackend.Persistence.Migrations
                 column: "NeighbourhoodId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Admins_IndividualUserId",
+                name: "IX_Admins_UserId",
                 table: "Admins",
-                column: "IndividualUserId");
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Advers_AddressId",
@@ -758,9 +761,9 @@ namespace ETradeBackend.Persistence.Migrations
                 column: "IndividualUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SwapForCategoryAdverts_CategoryId",
+                name: "IX_SwapForCategoryAdverts_DesiredCategoryId",
                 table: "SwapForCategoryAdverts",
-                column: "CategoryId");
+                column: "DesiredCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SwapForCategoryAdverts_SwapAdvertId",
@@ -769,9 +772,9 @@ namespace ETradeBackend.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SwapForProductAdverts_ProductId",
+                name: "IX_SwapForProductAdverts_DesiredProductId",
                 table: "SwapForProductAdverts",
-                column: "ProductId");
+                column: "DesiredProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SwapForProductAdverts_SwapAdvertId",

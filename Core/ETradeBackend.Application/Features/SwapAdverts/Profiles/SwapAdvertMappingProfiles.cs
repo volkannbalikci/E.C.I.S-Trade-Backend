@@ -26,8 +26,15 @@ public class SwapAdvertMappingProfiles : Profile
     public SwapAdvertMappingProfiles()
     {
         CreateMap<SwapAdvert, CreateSwapAdvertCommand>().ReverseMap();
+        CreateMap<Advert, CreateSwapAdvertCommand>().ReverseMap();
         CreateMap<CreateSwapAdvertCommand, CreatedSwapAdvertResponse>().ReverseMap();
         CreateMap<SwapAdvert, CreateSwapAdvertCommand>().ReverseMap();
+        CreateMap<SwapAdvert, CreatedSwapAdvertResponse>()
+                          .ForMember(destinationMember: i => i.SwapAdverId, memberOptions: opt => opt.MapFrom(i => i.Id))
+            .ReverseMap();
+        CreateMap<Advert, SwapAdvert>()
+              .ForMember(destinationMember: i => i.AdvertId, memberOptions: opt => opt.MapFrom(i => i.Id))
+            .ReverseMap();
         CreateMap<SwapAdvert, CreatedIndividualAdvertResponse>().ReverseMap();
         CreateMap<Advert, CreatedIndividualAdvertResponse>().ReverseMap();
         CreateMap<SwapAdvert, DeleteSwapAdvertCommand>().ReverseMap();

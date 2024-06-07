@@ -17,7 +17,7 @@ public class AdvertConfiguration : EntityTypeConfigurationBase<Advert, Guid>
         builder.Property(a => a.Title).HasColumnName("Title").IsRequired();
         builder.Property(a => a.Description).HasColumnName("Description").IsRequired();
 
-        builder.HasMany(a => a.AdvertPhotoPaths);
+        builder.HasMany(a => a.AdvertImageFiles);
         builder.HasOne(a => a.IndividualAdvert);
         builder.HasOne(a => a.CorporateAdvert);
         builder.HasOne(a => a.SwapAdvert);

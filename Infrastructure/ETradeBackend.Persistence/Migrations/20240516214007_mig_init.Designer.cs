@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ETradeBackend.Persistence.Migrations
 {
     [DbContext(typeof(ETradeBackendContext))]
-    [Migration("20240421215912_mig_1")]
-    partial class mig_1
+    [Migration("20240516214007_mig_init")]
+    partial class mig_init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,6 +82,10 @@ namespace ETradeBackend.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ContactNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedDate");
@@ -90,16 +94,25 @@ namespace ETradeBackend.Persistence.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletedDate");
 
-                    b.Property<Guid>("IndividualUserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("UpdatedDate");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IndividualUserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Admins");
                 });
@@ -166,6 +179,9 @@ namespace ETradeBackend.Persistence.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletedDate");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
 
                     b.Property<string>("PhotoPath")
                         .IsRequired()
@@ -716,9 +732,6 @@ namespace ETradeBackend.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreatedDate");
@@ -739,7 +752,7 @@ namespace ETradeBackend.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("DesiredCategoryId");
 
                     b.HasIndex("SwapAdvertId")
                         .IsUnique();
@@ -764,9 +777,6 @@ namespace ETradeBackend.Persistence.Migrations
                     b.Property<Guid>("DesiredProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("SwapAdvertId")
                         .HasColumnType("uniqueidentifier");
 
@@ -776,7 +786,7 @@ namespace ETradeBackend.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("DesiredProductId");
 
                     b.HasIndex("SwapAdvertId")
                         .IsUnique();
@@ -928,13 +938,13 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.Admin", b =>
                 {
-                    b.HasOne("ETradeBackend.Domain.Entities.IndividualUser", "IndividualUser")
-                        .WithMany("Admins")
-                        .HasForeignKey("IndividualUserId")
+                    b.HasOne("ETradeBackend.Domain.Entities.User", "User")
+                        .WithOne("Admin")
+                        .HasForeignKey("ETradeBackend.Domain.Entities.Admin", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("IndividualUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.Advert", b =>
@@ -1143,10 +1153,11 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.SwapForCategoryAdvert", b =>
                 {
-                    b.HasOne("ETradeBackend.Domain.Entities.Category", "Category")
+                    b.HasOne("ETradeBackend.Domain.Entities.Category", "DesiredCategory")
                         .WithMany("SwapForCategoryAdverts")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("DesiredCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ETradeBackend.Domain.Entities.SwapAdvert", "SwapAdvert")
                         .WithOne("SwapForCategoryAdvert")
@@ -1154,17 +1165,18 @@ namespace ETradeBackend.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("DesiredCategory");
 
                     b.Navigation("SwapAdvert");
                 });
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.SwapForProductAdvert", b =>
                 {
-                    b.HasOne("ETradeBackend.Domain.Entities.Product", "Product")
+                    b.HasOne("ETradeBackend.Domain.Entities.Product", "DesiredProduct")
                         .WithMany("SwapForProductAdverts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("DesiredProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ETradeBackend.Domain.Entities.SwapAdvert", "SwapAdvert")
                         .WithOne("SwapForProductAdvert")
@@ -1172,7 +1184,7 @@ namespace ETradeBackend.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("DesiredProduct");
 
                     b.Navigation("SwapAdvert");
                 });
@@ -1283,8 +1295,6 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.IndividualUser", b =>
                 {
-                    b.Navigation("Admins");
-
                     b.Navigation("Adverts");
 
                     b.Navigation("CorporateAdvertOrders");
@@ -1320,6 +1330,8 @@ namespace ETradeBackend.Persistence.Migrations
 
             modelBuilder.Entity("ETradeBackend.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Admin");
+
                     b.Navigation("CorporateUser");
 
                     b.Navigation("IndividualUser");

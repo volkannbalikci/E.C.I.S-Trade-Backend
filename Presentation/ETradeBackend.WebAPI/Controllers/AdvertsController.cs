@@ -1,4 +1,6 @@
-﻿using ETradeBackend.Application.Features.Adverts.Commands.Create;
+﻿using ETradeBackend.Application.Features.AdvertImageFiles.Commands.Upload;
+using ETradeBackend.Application.Features.AdvertImageFiles.Queries.GetList;
+using ETradeBackend.Application.Features.Adverts.Commands.Create;
 using ETradeBackend.Application.Features.Adverts.Commands.Delete;
 using ETradeBackend.Application.Features.Adverts.Commands.Update;
 using ETradeBackend.Application.Features.Adverts.Queries.GetById;
@@ -47,10 +49,25 @@ public class AdvertsController : CustomControllerBase
     }
 
     [HttpGet("{id}")]
-    async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         GetByIdAdvertQuery getByIdAdvertQuery = new() { Id = id };
         GetByIdAdvertResponse getByIdAdvertResponse = await Mediator.Send(getByIdAdvertQuery);
         return Ok(getByIdAdvertResponse);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Upload([FromQuery] UploadAdvertImageFileCommand uploadAdvertImageFileCommand)
+    {
+        uploadAdvertImageFileCommand.Files = Request.Form.Files;
+        UploadAdvertImageFileResponse uploadAdvertImageFileResponse = await Mediator.Send(uploadAdvertImageFileCommand);
+        return Ok();
+    }
+
+    [HttpGet("[action]/{id}")]
+    public async Task<IActionResult> GetAdvertImageFilesByAdvertId([FromRoute] GetListAdvertImageFileQuery getListAdvertImageFileQuery)
+    {
+        List<GetListAdvertImageFileListItemDto> response = await Mediator.Send(getListAdvertImageFileQuery);
+        return Ok(response);
     }
 }

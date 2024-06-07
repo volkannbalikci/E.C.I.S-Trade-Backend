@@ -31,13 +31,13 @@ public class GetListAdminQuery : IRequest<GetListResponse<GetListAdminListItemDt
 
         public async Task<GetListResponse<GetListAdminListItemDto>> Handle(GetListAdminQuery request, CancellationToken cancellationToken)
         {
-            //Paginate<Admin> admins = await _adminRepository.GetListByPaginateAsync(
-            //    include: a => a.Include(a => a.IndividualUser),
-            //    index: request.PageRequest.PageIndex,
-            //    size: request.PageRequest.PageSize,
-            //    cancellationToken: cancellationToken);
-            //GetListResponse<GetListAdminListItemDto> getListResponse = _mapper.Map<GetListResponse<GetListAdminListItemDto>>(admins);
-            return null;
+            Paginate<Admin> admins = await _adminRepository.GetListByPaginateAsync(
+                include: a => a.Include(a => a.User),
+                index: request.PageRequest.PageIndex,
+                size: request.PageRequest.PageSize,
+                cancellationToken: cancellationToken);
+            GetListResponse<GetListAdminListItemDto> getListResponse = _mapper.Map<GetListResponse<GetListAdminListItemDto>>(admins);
+            return getListResponse;
         }
     }
 }

@@ -22,10 +22,10 @@ public class SwapForCategoryAdvertsController : CustomControllerBase
         return Ok(createdSwapForCategoryAdvertResponse);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [HttpDelete("{swapForCategoryAdvertId},{swapAdvertId},{advertId}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid swapForCategoryAdvertId, [FromRoute] Guid swapAdvertId, [FromRoute] Guid advertId)
     {
-        DeleteSwapForCategoryAdvertCommand deleteSwapForCategoryAdvertCommand = new() {  SwapForCategoryAdvertId = id };
+        DeleteSwapForCategoryAdvertCommand deleteSwapForCategoryAdvertCommand = new() { SwapForCategoryAdvertId = swapForCategoryAdvertId, SwapAdvertId = swapAdvertId, AdvertId = advertId };
         DeletedSwapForCategoryAdvertResponse deletedSwapForCategoryAdvertResponse = await Mediator.Send(deleteSwapForCategoryAdvertCommand);
         return Ok(deletedSwapForCategoryAdvertResponse);
     }

@@ -16,8 +16,6 @@ public class CreateCorporateAdvertOrderCommand : IRequest<CreatedCorporateAdvert
     public Guid IndividualUserId { get; set; }
     public Guid UserAddressId { get; set; }
     public string Description { get; set; }
-    public string Code { get; set; }
-    public decimal TotalPrice { get; set; }
 
     public class CreateCorporateAdvertOrderCommandHandler : IRequestHandler<CreateCorporateAdvertOrderCommand, CreatedCorporateAdvertOrderResponse>
     {
@@ -36,6 +34,11 @@ public class CreateCorporateAdvertOrderCommand : IRequest<CreatedCorporateAdvert
         {
             CorporateAdvertOrder corporateAdvertOrder = _mapper.Map<CorporateAdvertOrder>(request);
             corporateAdvertOrder.Id = Guid.NewGuid();
+            corporateAdvertOrder.Code = $"{corporateAdvertOrder.Id.ToString()[1]}{corporateAdvertOrder.Id.ToString()[2]}_{corporateAdvertOrder.IndividualUserId.ToString()[2]}{corporateAdvertOrder.IndividualUserId.ToString()[0]}";
+            foreach (var item in corporateAdvertOrder.CorporateAdvertOrderItems)
+            {
+                corporateAdvertOrder.TotalPrice += item.BoughtPrice * item.Amount;
+            }
             await _corporateAdvertOrderRepository.AddAsync(corporateAdvertOrder);
 
             CreatedCorporateAdvertOrderResponse createdCorporateAdvertOrderResponse = _mapper.Map<CreatedCorporateAdvertOrderResponse>(corporateAdvertOrder);

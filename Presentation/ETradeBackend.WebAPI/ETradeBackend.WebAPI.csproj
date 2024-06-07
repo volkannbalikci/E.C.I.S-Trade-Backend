@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\ETradeBackend.Application\ETradeBackend.Application.csproj" />
+    <ProjectReference Include="..\..\Core\ETradeBackend.Domain\ETradeBackend.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ETradeBackend.Infrastructure\ETradeBackend.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ETradeBackend.Persistence\ETradeBackend.Persistence.csproj" />
   </ItemGroup>
 
@@ -23,6 +26,11 @@
     <Reference Include="Framework.Application">
       <HintPath>..\..\..\..\..\Framework\src\Framework\Core\Framework.Application\bin\Debug\net8.0\Framework.Application.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\resource\files\" />
   </ItemGroup>
 
 </Project>

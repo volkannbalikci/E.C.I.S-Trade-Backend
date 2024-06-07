@@ -37,6 +37,7 @@ public class ETradeBackendContext : DbContext
     public DbSet<SwapForProductAdvert> SwapForProductAdverts { get; set; }
     public DbSet<CorporateAdvertOrder> CorporateAdvertOrders { get; set; }
     public DbSet<CorporateAdvertOrderItem> CorporateAdvertOrderItems { get; set; }
+    public DbSet<AdvertImageFile> AdvertImageFile { get; set; }
     
     public ETradeBackendContext(DbContextOptions dbContextOptions, IConfiguration configuration) : base(dbContextOptions)
     {

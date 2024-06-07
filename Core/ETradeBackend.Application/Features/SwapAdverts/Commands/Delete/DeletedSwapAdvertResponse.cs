@@ -8,6 +8,7 @@ namespace ETradeBackend.Application.Features.SwapAdverts.Commands.Delete;
 
 public class DeletedSwapAdvertResponse
 {
-    public Guid Id { get; set; }
+    public Guid SwapAdvertId { get; set; }
+    public Guid AdvertId { get; set; }
     public DateTime DeletedDate { get; set; }
 }

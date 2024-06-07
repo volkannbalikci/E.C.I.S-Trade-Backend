@@ -12,4 +12,5 @@ public class GetListCorporateUserListItemDto
     public Guid UserId { get; set; }
     public string CompanyName { get; set; }
     public string TaxIdentityNumber { get; set; }
+    public string Email { get; set; }
 }

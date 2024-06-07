@@ -1,4 +1,5 @@
-﻿using ETradeBackend.Application.Services.Repositories;
+﻿using ETradeBackend.Application.Abstractions.Storage;
+using ETradeBackend.Application.Services.Repositories;
 using ETradeBackend.Persistence.Contexts;
 using ETradeBackend.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,8 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IUserAddressRepository, UserAddressRepository>();
         services.AddScoped<IUserOperationClaimRepository, UserOperationClaimRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IFileRepository, FileRepository>();
+        services.AddScoped<IAdvertImageFileRepository, AdvertImageFileRepository>();
 
         return services;
     }

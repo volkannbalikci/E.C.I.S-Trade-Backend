@@ -28,12 +28,12 @@ public class GetByIdAdminQuery : IRequest<GetByIdAdminResponse>
 
         public async Task<GetByIdAdminResponse> Handle(GetByIdAdminQuery request, CancellationToken cancellationToken)
         {
-            //Admin admin = await _adminRepository.GetAsync(
-            //    predicate: a => a.Id == request.Id,
-            //    include: a => a.Include(a => a.IndividualUser)
-            //    );
-            //GetByIdAdminResponse getByIdAdminResponse = _mapper.Map<GetByIdAdminResponse>(admin);
-            return null;
+            Admin admin = await _adminRepository.GetAsync(
+                predicate: a => a.Id == request.Id,
+                include: a => a.Include(a => a.User)
+                );
+            GetByIdAdminResponse getByIdAdminResponse = _mapper.Map<GetByIdAdminResponse>(admin);
+            return getByIdAdminResponse;
         }
     }
 }

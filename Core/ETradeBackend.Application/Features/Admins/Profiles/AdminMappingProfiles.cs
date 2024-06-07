@@ -2,8 +2,13 @@
 using ETradeBackend.Application.Features.Admins.Commands.Create;
 using ETradeBackend.Application.Features.Admins.Commands.Delete;
 using ETradeBackend.Application.Features.Admins.Commands.Update;
+using ETradeBackend.Application.Features.Admins.Queries.GetByFirstName;
 using ETradeBackend.Application.Features.Admins.Queries.GetById;
+using ETradeBackend.Application.Features.Admins.Queries.GetByRegisterNumber;
+using ETradeBackend.Application.Features.Admins.Queries.GetByUserId;
 using ETradeBackend.Application.Features.Admins.Queries.GetList;
+using ETradeBackend.Application.Features.Admins.Queries.GetListByContactNumber;
+using ETradeBackend.Application.Features.Admins.Queries.GetListByLastName;
 using ETradeBackend.Domain.Entities;
 using Framework.Application.Responses;
 using Framework.Persistence.Paging;
@@ -39,19 +44,78 @@ public class AdminMappingProfiles : Profile
             .ForMember(destinationMember: a => a.UserEmail, memberOptions: opt => opt.MapFrom(a => a.User.Email))
             .ReverseMap();
 
-        //CreateMap<Paginate<Admin>, GetListResponse<GetListAdminListItemDto>>().ReverseMap();
-        //CreateMap<Admin, GetListAdminListItemDto>()
-        //    .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.FirstName))
-        //    .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.LastName))
-        //    .ForMember(destinationMember: a => a.UserName, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.UserName))
-        //    //.ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.Email))
-        //    .ReverseMap();
+        CreateMap<Paginate<Admin>, GetListResponse<GetListAdminListItemDto>>().ReverseMap();
+        CreateMap<Admin, GetListAdminListItemDto>()
+            .ForMember(destinationMember: a => a.Id, memberOptions: opt => opt.MapFrom(a => a.Id))
+            .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.FirstName))
+            .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.LastName))
+            .ForMember(destinationMember: a => a.UserId, memberOptions: opt => opt.MapFrom(a => a.UserId))
+            .ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.User.Email))
+            .ForMember(destinationMember: a => a.RegisterNumber, memberOptions: opt => opt.MapFrom(a => a.RegisterNumber))
+            .ForMember(destinationMember: a => a.ContactNumber, memberOptions: opt => opt.MapFrom(a => a.ContactNumber))
+            .ReverseMap();
 
-        //CreateMap<Admin, GetByIdAdminResponse>()
-        //    .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.FirstName))
-        //    .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.LastName))
-        //    .ForMember(destinationMember: a => a.UserName, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.UserName))
-        //    //.ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.IndividualUser.Email))
-        //    .ReverseMap();
+        CreateMap<Admin, GetByContactNumberAdminResponse>()
+            .ForMember(destinationMember: a => a.Id, memberOptions: opt => opt.MapFrom(a => a.Id))
+            .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.FirstName))
+            .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.LastName))
+            .ForMember(destinationMember: a => a.UserId, memberOptions: opt => opt.MapFrom(a => a.UserId))
+            .ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.User.Email))
+            .ForMember(destinationMember: a => a.RegisterNumber, memberOptions: opt => opt.MapFrom(a => a.RegisterNumber))
+            .ForMember(destinationMember: a => a.ContactNumber, memberOptions: opt => opt.MapFrom(a => a.ContactNumber))
+            .ReverseMap();
+
+        CreateMap<Paginate<Admin>, GetListResponse<GetListByFirstNameAdminListItemDto>>().ReverseMap();
+        CreateMap<Admin, GetListByFirstNameAdminListItemDto>()
+            .ForMember(destinationMember: a => a.Id, memberOptions: opt => opt.MapFrom(a => a.Id))
+            .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.FirstName))
+            .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.LastName))
+            .ForMember(destinationMember: a => a.UserId, memberOptions: opt => opt.MapFrom(a => a.UserId))
+            .ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.User.Email))
+            .ForMember(destinationMember: a => a.RegisterNumber, memberOptions: opt => opt.MapFrom(a => a.RegisterNumber))
+            .ForMember(destinationMember: a => a.ContactNumber, memberOptions: opt => opt.MapFrom(a => a.ContactNumber))
+            .ReverseMap();
+
+        CreateMap<Paginate<Admin>, GetListResponse<GetListByLastNameAdminListItemDto>>().ReverseMap();
+        CreateMap<Admin, GetListByLastNameAdminListItemDto>()
+            .ForMember(destinationMember: a => a.Id, memberOptions: opt => opt.MapFrom(a => a.Id))
+            .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.FirstName))
+            .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.LastName))
+            .ForMember(destinationMember: a => a.UserId, memberOptions: opt => opt.MapFrom(a => a.UserId))
+            .ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.User.Email))
+            .ForMember(destinationMember: a => a.RegisterNumber, memberOptions: opt => opt.MapFrom(a => a.RegisterNumber))
+            .ForMember(destinationMember: a => a.ContactNumber, memberOptions: opt => opt.MapFrom(a => a.ContactNumber))
+            .ReverseMap();
+
+
+        CreateMap<Admin, GetByIdAdminResponse>()
+             .ForMember(destinationMember: a => a.Id, memberOptions: opt => opt.MapFrom(a => a.Id))
+            .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.FirstName))
+            .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.LastName))
+            .ForMember(destinationMember: a => a.UserId, memberOptions: opt => opt.MapFrom(a => a.UserId))
+            .ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.User.Email))
+            .ForMember(destinationMember: a => a.RegisterNumber, memberOptions: opt => opt.MapFrom(a => a.RegisterNumber))
+            .ForMember(destinationMember: a => a.ContactNumber, memberOptions: opt => opt.MapFrom(a => a.ContactNumber))
+            .ReverseMap();
+
+        CreateMap<Admin, GetByRegisterNumberAdminResponse>()
+     .ForMember(destinationMember: a => a.Id, memberOptions: opt => opt.MapFrom(a => a.Id))
+    .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.FirstName))
+    .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.LastName))
+    .ForMember(destinationMember: a => a.UserId, memberOptions: opt => opt.MapFrom(a => a.UserId))
+    .ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.User.Email))
+    .ForMember(destinationMember: a => a.RegisterNumber, memberOptions: opt => opt.MapFrom(a => a.RegisterNumber))
+    .ForMember(destinationMember: a => a.ContactNumber, memberOptions: opt => opt.MapFrom(a => a.ContactNumber))
+    .ReverseMap();
+
+        CreateMap<Admin, GetByUserIdAdminResponse>()
+     .ForMember(destinationMember: a => a.Id, memberOptions: opt => opt.MapFrom(a => a.Id))
+    .ForMember(destinationMember: a => a.FirstName, memberOptions: opt => opt.MapFrom(a => a.FirstName))
+    .ForMember(destinationMember: a => a.LastName, memberOptions: opt => opt.MapFrom(a => a.LastName))
+    .ForMember(destinationMember: a => a.UserId, memberOptions: opt => opt.MapFrom(a => a.UserId))
+    .ForMember(destinationMember: a => a.Email, memberOptions: opt => opt.MapFrom(a => a.User.Email))
+    .ForMember(destinationMember: a => a.RegisterNumber, memberOptions: opt => opt.MapFrom(a => a.RegisterNumber))
+    .ForMember(destinationMember: a => a.ContactNumber, memberOptions: opt => opt.MapFrom(a => a.ContactNumber))
+    .ReverseMap();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ETradeBackend.Application.Features.CorporateAdvertOrderItems.Commands.Create;
+using ETradeBackend.Application.Features.CorporateAdvertOrderItems.Queries.GetList;
 using ETradeBackend.Application.Features.CorporateAdvertOrders.Commands.Create;
 using ETradeBackend.Application.Features.CorporateAdvertOrders.Commands.Delete;
 using ETradeBackend.Application.Features.CorporateAdvertOrders.Queries.GetById;
@@ -17,6 +18,7 @@ namespace ETradeBackend.Application.Features.CorporateAdvertOrders.Profiles;
 
 public class CorporateAdvertOrderMappingProfiles : Profile
 {
+
     public CorporateAdvertOrderMappingProfiles()
     {
         CreateMap<CorporateAdvertOrder, CreateCorporateAdvertOrderCommand>().ReverseMap();
@@ -77,5 +79,6 @@ public class CorporateAdvertOrderMappingProfiles : Profile
     .ForMember(destinationMember: c => c.Description, memberOptions: opt => opt.MapFrom(c => c.Description))
     .ForMember(destinationMember: c => c.Code, memberOptions: opt => opt.MapFrom(c => c.Code))
     .ForMember(destinationMember: c => c.TotalPrice, memberOptions: opt => opt.MapFrom(c => c.TotalPrice)).ReverseMap();
+
     }
 }
